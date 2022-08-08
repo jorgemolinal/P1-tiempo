@@ -1,0 +1,12 @@
+{
+  "name": "P1_el_tiempo",
+  "author": "IWEB-UPM",
+  "license": "GNU",
+  "version": "0.1.0",
+  "info": {
+      "githubURL": "IWEB-UPM/P1_el_tiempo",
+      "serverUrl": "https://autocorector.dit.upm.es/",
+      "courseId": "395",
+      "assignmentId": "53406"
+  }
+}
