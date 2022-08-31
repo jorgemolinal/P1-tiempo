@@ -1,7 +1,6 @@
 import {render, fireEvent, waitFor, screen} from '@testing-library/react'
-import App from './App';
-import * as config from './config/config';
-import {mock2} from './constants/mock2';
+import App from '../../src/App';
+import {mock2} from '../utils/mock2';
 
 //hay un segundo test suite para cambiar la configuración, si lo hago al vuelo así:
 //mock per test: https://mikeborozdin.com/post/changing-jest-mocks-between-tests/
@@ -14,7 +13,7 @@ import {mock2} from './constants/mock2';
 const mytestconfig = {
   server_url: "http://nuevoserver.com",
   api_key: "apikeyfake_nohacefaltaporquehagomockdefetch",
-  num_items: 6,
+  num_items: 3,
   default_lat: 41.416775,
   default_lon: -4.703790,
   use_server: true,
@@ -23,7 +22,7 @@ const mytestconfig = {
 
 jest.setTimeout(10000);
 
-jest.mock('./config/config', () => ( {
+jest.mock('../../src/config/config', () => ( {
   __esModule: true,
   default: mytestconfig  
 } ));
@@ -43,10 +42,7 @@ test(JSON.stringify(testinfo), async () => {
     json: () => Promise.resolve(mock2)
   }));
   
-  console.log();
-  console.log("LOGS DEL ALUMNO:");
   render(<App />);
-  console.log("------FIN LOGS DEL ALUMNO------");
   const buscar = document.querySelector('#buscar');
   fireEvent.click(buscar);
   //espero a que cargue los resultados, para ello uso scren.getAllByText que devuelve una promesa
@@ -54,40 +50,11 @@ test(JSON.stringify(testinfo), async () => {
   const resultado = document.querySelector('#resultados');
   expect(resultado).toBeInTheDocument();
   expect(resultado).toHaveTextContent(/El tiempo/i);
-  expect(resultado).toHaveTextContent(/Timezone/i);
+  expect(resultado).toHaveTextContent(/Inventado2\/Pais2/i);
   expect(resultado).toHaveTextContent("4/8/2022");
-  const tarjetas = document.querySelectorAll('.tarjeta');
-  expect(tarjetas).toHaveLength(mytestconfig.num_items);
+  const imagenes = document.querySelectorAll('.tiempoimg');
+  expect(imagenes).toHaveLength(mytestconfig.num_items);
 });
-
-
-testinfo = {
-  name: "La aplicación llama al servidor si se indica así en la configuración y funciona para códigos de error",
-  score: 1,
-  msg_ok: "La aplicación llama al servidor adecuadamente y funciona bien con códigos de error",
-  msg_error: "La aplicación NO llama al servidor adecuadamente o NO funciona bien con códigos de error"
-}
-test(JSON.stringify(testinfo), async () => {
-  //mock de fetch. O se pone aquí o en beforeEach, si no no tira
-  global.fetch = jest.fn(() => Promise.resolve({
-    status: 500,
-    json: () => Promise.resolve(mock2)
-  }));
-  
-  console.log();
-  console.log("LOGS DEL ALUMNO:");
-  render(<App />);
-  console.log("------FIN LOGS DEL ALUMNO------");
-  const buscar = document.querySelector('#buscar');
-  fireEvent.click(buscar);
-  //espero a que cargue los resultados, para ello uso scren.getAllByText que devuelve una promesa
-  await waitFor(() => screen.getAllByText(/error/i), {timeout: 5000});
-  const resultado = document.querySelector('#error');
-  expect(resultado).toBeInTheDocument();
-  expect(resultado).toHaveTextContent(/error/i);
-  expect(resultado).toHaveTextContent(/Código 500/i);
-});
-
 
 testinfo = {
   name: "La query formada para llamar al servidor es correcta",
@@ -95,25 +62,55 @@ testinfo = {
   msg_ok: "La query formada para llamar al servidor es correcta",
   msg_error: "La query formada para llamar al servidor NO es correcta"
 }
-test(JSON.stringify(testinfo), () => {
+test(JSON.stringify(testinfo), async () => {
   //mock de fetch. O se pone aquí o en beforeEach, si no no tira
   global.fetch = jest.fn(() => Promise.resolve({
     status: 200,
     json: () => Promise.resolve(mock2)
   }));
-  console.log();
-  console.log("LOGS DEL ALUMNO:");
   render(<App />);
-  console.log("------FIN LOGS DEL ALUMNO------");
   const lat = document.querySelector('#latitud');
   const lon = document.querySelector('#longitud');
   fireEvent.change(lat, {target: {value: 45.6}});
   fireEvent.change(lon, {target: {value: -15.6}});
   const buscar = document.querySelector('#buscar');
-  fireEvent.click(buscar);
-  const url = global.fetch.mock.calls[0][0];
-  expect(url).toMatch(mytestconfig.server_url);
-  expect(url).toMatch("appid="+mytestconfig.api_key);
-  expect(url).toMatch("lat=45.6");
-  expect(url).toMatch("lon=-15.6");
+  await fireEvent.click(buscar);
+  
+  //necesitamos waitFor porque hacemos un re-render asincrono después del fetch en App.js - https://davidwcai.medium.com/react-testing-library-and-the-not-wrapped-in-act-errors-491a5629193b
+  //además he tenido que añadir await a fireEvent.click(buscar) para que funcione
+  await waitFor(() => {
+    const url = global.fetch.mock.calls[0][0];
+    expect(url).toMatch(mytestconfig.server_url);
+    expect(url).toMatch("appid="+mytestconfig.api_key);
+    expect(url).toMatch("lat=45.6");
+    expect(url).toMatch("lon=-15.6");
+  });
 });
+
+
+testinfo = {
+  name: "La aplicación llama al servidor si se indica así en la configuración y funciona para códigos de error",
+  score: 1.5,
+  msg_ok: "La aplicación llama al servidor adecuadamente y funciona bien con códigos de error",
+  msg_error: "La aplicación NO llama al servidor adecuadamente o NO funciona bien con códigos de error"
+}
+test(JSON.stringify(testinfo), async () => {
+  //mock de fetch. O se pone aquí o en beforeEach, si no no tira
+  global.fetch = jest.fn(() => Promise.resolve({
+    status: 500,
+    json: () => Promise.resolve({ cod: "500", message: "XXX - YYY - ZZZ"})
+  }));
+  
+  render(<App />);
+  const buscar = document.querySelector('#buscar');
+  fireEvent.click(buscar);
+  //espero a que cargue los resultados, para ello uso scren.getAllByText que devuelve una promesa
+  await waitFor(() => screen.getAllByText(/error/i), {timeout: 5000});
+  const resultado = document.querySelector('#error');
+  expect(resultado).toBeInTheDocument();
+  expect(resultado).toHaveTextContent(/error/i);
+  expect(resultado).toHaveTextContent(/XXX - YYY - ZZZ/i);
+});
+
+
+
