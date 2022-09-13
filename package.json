@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "autocorector": "^3.0.16",
+    "autocorector": "^3.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -19,9 +19,9 @@
   },
   "info": {
     "githubURL": "IWEB-UPM/P1_el_tiempo",
-    "serverUrl": "https://autocorector.dit.upm.es/",
-    "courseId": "395",
-    "assignmentId": "53406"
+    "serverUrl": "https://aat.dit.upm.es/",
+    "courseId": "396",
+    "assignmentId": "39931"
   },
   "scripts": {
     "start": "react-scripts start",

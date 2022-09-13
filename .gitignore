@@ -24,4 +24,4 @@ yarn-error.log*
 
 user.json
 /autocorector/data
-/src/config.js
+/src/config/config.js
