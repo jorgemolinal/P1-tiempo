@@ -109,7 +109,6 @@ test(JSON.stringify(testinfo), async () => {
   const resultado = document.querySelector('#error');
   expect(resultado).toBeInTheDocument();
   expect(resultado).toHaveTextContent(/error/i);
-  expect(resultado).toHaveTextContent(/XXX - YYY - ZZZ/i);
 });
 
 

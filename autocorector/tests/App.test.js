@@ -141,7 +141,7 @@ test(JSON.stringify(testinfo), async () => {
   expect(resultado).toBeInTheDocument();
   expect(resultado).toHaveTextContent(/El tiempo/i);
   expect(resultado).toHaveTextContent(/Europe\/Madrid/i);
-  expect(resultado).toHaveTextContent("30/6/2022");
+  expect(resultado).toHaveTextContent("16/9/2022");
   const imagenes = document.querySelectorAll('.tiempoimg');
   expect(imagenes).toHaveLength(mytestconfig.num_items);
 });
