@@ -17,12 +17,6 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "info": {
-    "githubURL": "IWEB-UPM/P1_el_tiempo",
-    "serverUrl": "https://aat.dit.upm.es/",
-    "courseId": "396",
-    "assignmentId": "39931"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

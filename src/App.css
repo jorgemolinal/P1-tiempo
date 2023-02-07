@@ -1,27 +1,32 @@
+
 .App {
-  text-align: center;
+  /* Alinea el texto (como center) y tb los bloques (imagenes y eso) */
+  text-align: -webkit-center;
+}
+/* Del Header */
+#cabecera {
+  background-color: #282c34;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0cm;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.logo {
+  width: 70px;
+  animation: App-logo-spin infinite 20s linear;
+}
+
+.mensaje {
+  color: #c9eced;
+  margin-left: 20px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
@@ -36,3 +41,28 @@
     transform: rotate(360deg);
   }
 }
+#titulo {
+  text-align: center
+}
+#buscar{
+  margin: 1%;
+}
+.input{
+  margin: 1%;
+}
+
+/* Del Resultado */
+#items{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+li {
+  list-style-type: none;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
