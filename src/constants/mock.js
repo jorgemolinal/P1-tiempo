@@ -1601,8 +1601,8 @@ export const mock1 = {
           "feels_like":{
              "day":291.67,
              "night":292.44,
-             "eve":293.91,
-             "morn":292.06
+             "eve":293.91,  
+              "morn":292.06
           },
           "pressure":1018,
           "humidity":76,
